@@ -1,0 +1,20 @@
+kind: Cluster
+apiVersion: clusterregistry.k8s.io/v1alpha1
+metadata:
+  name: gke-cluster
+  labels:
+    environment: csm
+---
+kind: Cluster
+apiVersion: clusterregistry.k8s.io/v1alpha1
+metadata:
+  name: onprem-cluster
+  labels:
+    environment: istio
+---
+kind: Cluster
+apiVersion: clusterregistry.k8s.io/v1alpha1
+metadata:
+  name: external-cluster
+  labels:
+    environment: istio
