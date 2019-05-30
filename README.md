@@ -271,19 +271,25 @@ Left screen
 ```
 export REMOTE=remote
 export CENTRAL=central
+```
+*Configure Remote Cluster to look at Git Repository for Configuration Changes*
 
+Variables should be already set and stream results to kubectl apply -- Verify if you are not sure
+
+```
 kubectx $REMOTE
 
-*Variables should be already set and stream results to kubectl apply -- Verify if you are not sure*
-```
 cat $BASE_DIR/config-management/config_sync.yaml | \
   sed 's@<REPO_URL>@'"$REPO_URL"'@g' | \
   sed 's@<CLUSTER_NAME>@'"$REMOTE"'@g' | \
   kubectl apply -f -
+```
+*Configure Central Cluster to look at Git Repository for Configuration Changes*
 
+Variables should be already set and stream results to kubectl apply -- Verify if you are not sure
+```
 kubectx $CENTRAL
 
-*Variables should be already set and stream results to kubectl apply -- Verify if you are not sure*
 cat $BASE_DIR/config-management/config_sync.yaml | \
   sed 's@<REPO_URL>@'"$REPO_URL"'@g' | \
   sed 's@<CLUSTER_NAME>@'"$CENTRAL"'@g' | \
