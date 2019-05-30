@@ -1,24 +1,32 @@
 # anthos-demo-config
 
-******************************************************
-******************************************************
-*******             Anthos demo                *******
-******************************************************
+******************************************************************
+******************************************************************
+*******   Anthos demo -- Quick Start   *******
+*******   Reference Implementation   *******
+*******   Main document --> go/anthos-workshop-reference   *******
+******************************************************************
+******************************************************************
+Enable Access (Start with this step -- can take 2 days to process)
+******************************************************************
+
+REQUEST ACCESS for gcct-demos folder 
+https://sphinx.corp.google.com/sphinx/
+
+EXEMPT your project from GCE Enforced
+http://cloud-exemptions.googleplex.com
+
+         ################### GKE OnPrem Whitelist ###################
+         (project, user, service account)
+         gcloud iam service-accounts create anthos-connect
+         Fill out the form with
+         anthos-connect@[YOUR_PROJECT].iam.gserviceaccount.com
+         #######################################################
+
 ******************************************************
 Enable API's
 ******************************************************
-go/anthos-workshop-reference (Main document)
-
-Access 
-https://sphinx.corp.google.com/sphinx/
-REQUEST ACCESS for gcct-demos folder
-
-http://cloud-exemptions.googleplex.com
-
-
-
-******************************************************
-gcloud config set project gaillard-gcp
+gcloud config set project YOUR_PROJECT
 
 gcloud services enable \
     cloudresourcemanager.googleapis.com \
@@ -48,7 +56,6 @@ Execute the scripts
 
 ./bootstrap-workshop.sh
 
-
 This script does the following:
 Downloads client-side tools: kubectx, Helm, istioctl
 Creates a GKE (on GCP) cluster named central 
@@ -56,7 +63,7 @@ Creates a second, non-GKE Kubernetes cluster in GCP (Kops / GCE)
 Installs the Anthos Config Management operator on both Kubernetes clusters 
 Installs open-source Istio on both Kubernetes clusters 
 
-        ######### Firewall issues ###################
+        ################### Firewall issues ###################
         Run this to see if the firewall rul is in place:
 
         gcloud compute firewall-rules list --format yaml | \
@@ -67,14 +74,13 @@ Installs open-source Istio on both Kubernetes clusters
 
         If not in place or your shell has been restarted with new IP run this command -->
         ./common/remote-k8s-access-fw.sh
-        #############################################
+        #######################################################
 
 ******************************************************
-Register Clusters with Hub
+Register Clusters with Hub (Console) 
 ******************************************************
-https://docs.google.com/document/d/1Oi631V_rrqZqr-qAjsgJCWGKsCLJfFUrD_MUQOFVTZk/edit?ts=5cbe35f0#heading=h.6sehoiuz4t7
 
-******* Validate cluster status *******
+******* Validate cluster status
 kubectx remote
 kubectl get nodes
 
