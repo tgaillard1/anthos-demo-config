@@ -120,6 +120,7 @@ gcloud iam service-accounts keys create $GKE_SA_CREDS \
 cat $GKE_SA_CREDS
 ```
 *In Console*
+
 Go to --> GCP --> GKE --> Clusters --> Register Cluster
 Enter --> Cluster name = remote
 Paste SA 
@@ -180,17 +181,18 @@ kubectl run nginx-remote --image=nginx --replicas=3
 Central Policy Management
 ******************************************************
 
-******* Configure Git *******
+*Configure Git*
  
 Fork the sample repo to your git location so you can push changes to your own copy --> https://github.com/tgaillard1/config-repo.git
 
+```
 cd $HOME
-git clone https://github.com/tgaillard1/config-repo.git
+git clone https://github.com/YOUR_GIT_LOCATION/config-repo.git
 cd $HOME/config-repo
 
-export GITHUB_ACCOUNT=tgaillard1
-export REPO_URL=https://github.com/tgaillard1/config-repo.git
-
+export GITHUB_ACCOUNT=YOUR_GIT_USER
+export REPO_URL=https://github.com/YOUR_GIT_LOCATION/config-repo.git
+```
 
 
                 ******* Google Cloud Source Repositories (GCSR) *******
@@ -233,15 +235,15 @@ export REPO_URL=https://github.com/tgaillard1/config-repo.git
                 Key* =
                 Paste contents from --> cat $HOME/.ssh/$NOMOS_SSH_KEY.pub
 
-******* Validate structure and Connect *******
+*Validate structure and Connect*
 
 tree . (results should show istio-system and logging namespaces)
 echo $REPO_URL
 cat $BASE_DIR/config-management/config_sync.yaml (verify it has right variables)
 
-@@@@@@@@@@@@@ Split screens
+@@@@@@@@ Split -- screens cntl b - shift 5
 Right screen --
-
+```
 export REMOTE=remote
 export CENTRAL=central
 
@@ -254,17 +256,19 @@ watch \
     kubectl --context $REMOTE get ns; \
     echo '\nLogging Pods'; \
     kubectl --context $REMOTE get po -n logging"
-
-@@@@@@@@@@@@@ 
+```
+@@@@@@@@ -- screens cntl b - o
 Left screen
 
---- Git Hub ---
+*Git Hub*
+```
 export REMOTE=remote
 export CENTRAL=central
 
 kubectx $REMOTE
 
-# Replace variables and stream results to kubectl apply
+*Replace variables and stream results to kubectl apply*
+
 cat $BASE_DIR/config-management/config_sync.yaml | \
   sed 's@<REPO_URL>@'"$REPO_URL"'@g' | \
   sed 's@<CLUSTER_NAME>@'"$REMOTE"'@g' | \
@@ -272,11 +276,12 @@ cat $BASE_DIR/config-management/config_sync.yaml | \
 
 kubectx $CENTRAL
 
-# Replace variables and stream results to kubectl apply
+*Replace variables and stream results to kubectl apply
 cat $BASE_DIR/config-management/config_sync.yaml | \
   sed 's@<REPO_URL>@'"$REPO_URL"'@g' | \
   sed 's@<CLUSTER_NAME>@'"$CENTRAL"'@g' | \
   kubectl apply -f -
+```
 
 In a few moments you should see the logging namespace and fluentd daemonset automatically applied to all the clusters (central and remote).
 
