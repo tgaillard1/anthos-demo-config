@@ -181,7 +181,7 @@ kubectl run nginx-remote --image=nginx --replicas=3
 Central Policy Management
 ******************************************************
 
-*Configure Git*
+*Option 1: Configure Repository for Git*
  
 Fork the sample repo to your git location so you can push changes to your own copy --> https://github.com/tgaillard1/config-repo.git
 
@@ -193,7 +193,17 @@ cd $HOME/config-repo
 export GITHUB_ACCOUNT=YOUR_GIT_USER
 export REPO_URL=https://github.com/YOUR_GIT_LOCATION/config-repo.git
 ```
+*Validate structure and Connect*
 
+```
+tree . (results should show istio-system and logging namespaces)
+echo $REPO_URL
+cat $BASE_DIR/config-management/config_sync.yaml (verify it has right variables)
+```
+
+*Option 2: Configure Repository for GCSR*
+
+--- If you are using Git you do not need to do this option---
 
                 ******* Google Cloud Source Repositories (GCSR) *******
 
@@ -235,13 +245,9 @@ export REPO_URL=https://github.com/YOUR_GIT_LOCATION/config-repo.git
                 Key* =
                 Paste contents from --> cat $HOME/.ssh/$NOMOS_SSH_KEY.pub
 
-*Validate structure and Connect*
-
-tree . (results should show istio-system and logging namespaces)
-echo $REPO_URL
-cat $BASE_DIR/config-management/config_sync.yaml (verify it has right variables)
 
 @@@@@@@@ Split -- screens cntl b - shift 5
+
 Right screen --
 ```
 export REMOTE=remote
@@ -258,6 +264,7 @@ watch \
     kubectl --context $REMOTE get po -n logging"
 ```
 @@@@@@@@ -- screens cntl b - o
+
 Left screen
 
 *Git Hub*
@@ -267,8 +274,8 @@ export CENTRAL=central
 
 kubectx $REMOTE
 
-*Replace variables and stream results to kubectl apply*
-
+*Variables should be already set and stream results to kubectl apply -- Verify if you are not sure*
+```
 cat $BASE_DIR/config-management/config_sync.yaml | \
   sed 's@<REPO_URL>@'"$REPO_URL"'@g' | \
   sed 's@<CLUSTER_NAME>@'"$REMOTE"'@g' | \
@@ -276,7 +283,7 @@ cat $BASE_DIR/config-management/config_sync.yaml | \
 
 kubectx $CENTRAL
 
-*Replace variables and stream results to kubectl apply
+*Variables should be already set and stream results to kubectl apply -- Verify if you are not sure*
 cat $BASE_DIR/config-management/config_sync.yaml | \
   sed 's@<REPO_URL>@'"$REPO_URL"'@g' | \
   sed 's@<CLUSTER_NAME>@'"$CENTRAL"'@g' | \
@@ -285,11 +292,10 @@ cat $BASE_DIR/config-management/config_sync.yaml | \
 
 In a few moments you should see the logging namespace and fluentd daemonset automatically applied to all the clusters (central and remote).
 
------
-******* Push a config update *******
+*Push a config update*
 
------ namespace
-
+Create new namespace "checkout"
+```
 mkdir namespaces/checkout
 
 cat <<EOF > namespaces/checkout/namespace.yaml
@@ -300,14 +306,18 @@ metadata:
 EOF
 
 tree .
+```
 
-
-git config --global user.email timlgaillard@gmail.com
-git config --global user.name tgaillard1
+*Push changes to Git using your credentials*
+```
+git config --global user.email GIT_EMAIL
+git config --global user.name GIT_USER
 git add . && git commit -m 'adding checkout namespace'
 git push origin master
+```
 
------ Quoata 
+Create new "quoata" policy
+``` 
 cat <<EOF > namespaces/checkout/quota.yaml
 kind: ResourceQuota
 apiVersion: v1
@@ -321,9 +331,10 @@ spec:
 EOF
 
 tree .
+```
 
-git config --global user.email timlgaillard@gmail.com
-git config --global user.name tgaillard1
+*Push changes to Git using your credentials*
+
 git add . && git commit -m 'adding quoata to checkout namespace'
 git push origin master
 
