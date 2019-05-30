@@ -23,6 +23,7 @@ http://cloud-exemptions.googleplex.com
 ******************************************************
 Enable API's
 ******************************************************
+```
 gcloud config set project YOUR_PROJECT
 
 gcloud services enable \
@@ -35,17 +36,20 @@ gcloud services enable \
     cloudbuild.googleapis.com \
     sourcerepo.googleapis.com \
     run.googleapis.com
+```
 
 ******************************************************
 Clone Source Repo & Set the base directory and paths
 ******************************************************
-
+```
 git clone https://github.com/GoogleCloudPlatform/anthos-workshop.git anthos-demo
 
 cd anthos-demo
 
 Set the base directory and paths
+```
 source ./env
+```
 
 ******************************************************
 Deploy Anthos
