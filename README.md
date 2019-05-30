@@ -3,7 +3,6 @@
 #   Anthos demo -- Quick Start  
 ### Reference Implementation main document --> go/anthos-workshop-reference
 ******************************************************************
-******************************************************************
 ### Enable Access (Start with this step -- can take 2 days to process)
 ******************************************************************
 
@@ -82,27 +81,27 @@ Installs open-source Istio on both Kubernetes clusters
 Register Clusters with Hub (Console) 
 ******************************************************
 
-******* Validate cluster status *******
+* * Validate cluster status
 ```
 kubectx remote
 kubectl get nodes
 ```
 
-** Add local repository
+* * Add local repository
 
     sudo gcloud components repositories add \
     https://storage.googleapis.com/gkehub-gcloud-dist-beta/components-2.json
 
     sudo gcloud components update --quiet
 
-** Create GCP Service Account for cluster registration 
+* * Create GCP Service Account for cluster registration 
 ```
 export PROJECT=$(gcloud config get-value project)
 export GKE_CONNECT_SA=anthos-connect
 export GKE_SA_CREDS=$WORK_DIR/$GKE_CONNECT_SA-creds.json
 ```
 
-** Create and Update bindings for Service Account 
+* * Create and Update bindings for Service Account 
 ```
 gcloud projects add-iam-policy-binding $PROJECT \
 --member="serviceAccount:$GKE_CONNECT_SA@$PROJECT.iam.gserviceaccount.com" \
@@ -115,7 +114,7 @@ gcloud iam service-accounts keys create $GKE_SA_CREDS \
   --project=$PROJECT
 
 
-******* Use Console to Register with Hub *******
+* * Use Console to Register with Hub 
 
 cat $GKE_SA_CREDS
 
