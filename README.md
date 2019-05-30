@@ -81,7 +81,7 @@ Installs open-source Istio on both Kubernetes clusters
 Register Clusters with Hub (Console) 
 ******************************************************
 
-* * Validate cluster status
+* *Validate cluster status
 ```
 kubectx remote
 kubectl get nodes
