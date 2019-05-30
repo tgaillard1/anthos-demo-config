@@ -78,9 +78,10 @@ Register Clusters with Hub (Console)
 ******************************************************
 
 ******* Validate cluster status *******
-
+```
 kubectx remote
 kubectl get nodes
+```
 
 ******* Add local repository
 
