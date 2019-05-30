@@ -1,11 +1,10 @@
 ******************************************************************
 ******************************************************************
-#   Anthos demo -- Quick Start 
-##  Reference Implementation 
-### Main document --> go/anthos-workshop-reference
+#   Anthos demo -- Quick Start  
+### Reference Implementation main document --> go/anthos-workshop-reference
 ******************************************************************
 ******************************************************************
-Enable Access (Start with this step -- can take 2 days to process)
+### Enable Access (Start with this step -- can take 2 days to process)
 ******************************************************************
 
 REQUEST ACCESS for gcct-demos folder 
