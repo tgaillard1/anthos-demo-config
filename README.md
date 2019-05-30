@@ -43,8 +43,8 @@ Clone Source Repo & Set the base directory and paths
 ******************************************************
 ```
 git clone https://github.com/GoogleCloudPlatform/anthos-workshop.git anthos-demo
-
 cd anthos-demo
+```
 
 Set the base directory and paths
 ```
