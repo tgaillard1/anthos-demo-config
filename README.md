@@ -81,89 +81,100 @@ Installs open-source Istio on both Kubernetes clusters
 Register Clusters with Hub (Console) 
 ******************************************************
 
-* *Validate cluster status
+*Validate cluster status*
 ```
 kubectx remote
 kubectl get nodes
 ```
 
-* * Add local repository
+*Add local repository*
 
     sudo gcloud components repositories add \
     https://storage.googleapis.com/gkehub-gcloud-dist-beta/components-2.json
 
     sudo gcloud components update --quiet
 
-* * Create GCP Service Account for cluster registration 
+*Create GCP Service Account for cluster registration*
 ```
 export PROJECT=$(gcloud config get-value project)
 export GKE_CONNECT_SA=anthos-connect
 export GKE_SA_CREDS=$WORK_DIR/$GKE_CONNECT_SA-creds.json
 ```
 
-* * Create and Update bindings for Service Account 
+*Create and Update bindings for Service Account*
 ```
 gcloud projects add-iam-policy-binding $PROJECT \
 --member="serviceAccount:$GKE_CONNECT_SA@$PROJECT.iam.gserviceaccount.com" \
 --role="roles/gkehub.connect"
 ```
 
--- Create and download a key
+*Create and download a key*
+```
 gcloud iam service-accounts keys create $GKE_SA_CREDS \
   --iam-account=$GKE_CONNECT_SA@$PROJECT.iam.gserviceaccount.com \
   --project=$PROJECT
+```
 
-
-* * Use Console to Register with Hub 
-
+*Use Console to Register with Hub*
+```
 cat $GKE_SA_CREDS
-
+```
+*In Console*
 Go to --> GCP --> GKE --> Clusters --> Register Cluster
 Enter --> Cluster name = remote
 Paste SA 
 
 In the ensuing screen, click DOWNLOAD GKE CONNECT MANIFEST and save the file.
 
-******* Create connect file *******
+*Create connect file*
+```
 vi $WORK_DIR/remote-cluster-gke-connect-config.yaml
+```
 
 Open MANIFEST doc locally and copy the entire contents into the remote-cluster-gke-connect-config.yaml created above -- save firewall
 
-******* Then run this to connect to cluster *******
+*Then run this to connect to cluster*
+```
 export REMOTE_CLUSTER_NAME_BASE="remote"
 
 kubectx $REMOTE_CLUSTER_NAME_BASE
 kubectl apply -f $WORK_DIR/remote-cluster-gke-connect-config.yaml
+```
 
 If successful you get --> GKE Connect agent for cluser remote is connected -- in Console
 
 Apply any desired labels and click Register
 
-******* Login to cluser -- Note: Registered cluster with SA, not local IAM user; tgaillard *******
-******* Create Token *******
+******************************************************
+Login to cluser -- Note: Registered cluster is with SA, not your local IAM user
+******************************************************
 
+*Create Token*
+```
 export KSA=remote-admin-sa
 kubectl create serviceaccount $KSA
 kubectl create clusterrolebinding ksa-admin-binding \
     --clusterrole cluster-admin \
     --serviceaccount default:$KSA
+```
 
-# Retrieve Token for login process
+*Retrieve Token for login process*
+```
 printf "\n$(kubectl describe secret $KSA | sed -ne 's/^token: *//p')\n\n"
+```
 
 Go to console and select token and paste in the results from the above command
 
 ******************************************************
-Deploy Apps
+Deploy Sample Apps
 ******************************************************
+```
 kubectx central
 kubectl run nginx-central --image=nginx --replicas=3
 
 kubectx remote
 kubectl run nginx-remote --image=nginx --replicas=3
-
-kubectl config use-context checkout
-kubectl run nginx-check --image=nginx --replicas=3 --use-context=checkout
+```
 
 ******************************************************
 Central Policy Management
@@ -171,7 +182,7 @@ Central Policy Management
 
 ******* Configure Git *******
  
-Fork the sample repo to your git location so you can push changes to your own copy --> https://github.com/cgrant/config-repos
+Fork the sample repo to your git location so you can push changes to your own copy --> https://github.com/tgaillard1/config-repo.git
 
 cd $HOME
 git clone https://github.com/tgaillard1/config-repo.git
