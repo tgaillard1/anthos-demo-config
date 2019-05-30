@@ -48,7 +48,7 @@ Set the base directory and paths
 source ./env
 
 ******************************************************
-Execute the scripts
+Deploy Anthos
 ******************************************************
 
 ./bootstrap-workshop.sh
@@ -60,7 +60,7 @@ Creates a second, non-GKE Kubernetes cluster in GCP (Kops / GCE)
 Installs the Anthos Config Management operator on both Kubernetes clusters 
 Installs open-source Istio on both Kubernetes clusters 
 
-        ################### Firewall issues ###################
+        #############  If you have Firewall issues #############
         Run this to see if the firewall rul is in place:
 
         gcloud compute firewall-rules list --format yaml | \
@@ -71,26 +71,28 @@ Installs open-source Istio on both Kubernetes clusters
 
         If not in place or your shell has been restarted with new IP run this command -->
         ./common/remote-k8s-access-fw.sh
-        #######################################################
+        #########################################################
 
 ******************************************************
 Register Clusters with Hub (Console) 
 ******************************************************
 
-******* Validate cluster status
+******* Validate cluster status *******
+
 kubectx remote
 kubectl get nodes
 
-******* Add local repository *******
-sudo gcloud components repositories add \
-https://storage.googleapis.com/gkehub-gcloud-dist-beta/components-2.json
+******* Add local repository
 
-sudo gcloud components update --quiet
+    sudo gcloud components repositories add \
+    https://storage.googleapis.com/gkehub-gcloud-dist-beta/components-2.json
+
+    sudo gcloud components update --quiet
 
 ******* Create GCP Service Account for cluster registration *******
-export PROJECT=$(gcloud config get-value project)
-export GKE_CONNECT_SA=anthos-connect
-export GKE_SA_CREDS=$WORK_DIR/$GKE_CONNECT_SA-creds.json
+    export PROJECT=$(gcloud config get-value project)
+    export GKE_CONNECT_SA=anthos-connect
+    export GKE_SA_CREDS=$WORK_DIR/$GKE_CONNECT_SA-creds.json
 
 # Create and Update bindings for Service Account
 # Assign it GKE Connect rights
