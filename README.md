@@ -54,8 +54,9 @@ source ./env
 ******************************************************
 Deploy Anthos
 ******************************************************
-
+```
 ./bootstrap-workshop.sh
+```
 
 This script does the following:
 Downloads client-side tools: kubectx, Helm, istioctl
@@ -87,26 +88,28 @@ kubectx remote
 kubectl get nodes
 ```
 
-******* Add local repository
+** Add local repository
 
     sudo gcloud components repositories add \
     https://storage.googleapis.com/gkehub-gcloud-dist-beta/components-2.json
 
     sudo gcloud components update --quiet
 
-******* Create GCP Service Account for cluster registration *******
-    export PROJECT=$(gcloud config get-value project)
-    export GKE_CONNECT_SA=anthos-connect
-    export GKE_SA_CREDS=$WORK_DIR/$GKE_CONNECT_SA-creds.json
+** Create GCP Service Account for cluster registration 
+```
+export PROJECT=$(gcloud config get-value project)
+export GKE_CONNECT_SA=anthos-connect
+export GKE_SA_CREDS=$WORK_DIR/$GKE_CONNECT_SA-creds.json
+```
 
-# Create and Update bindings for Service Account
-# Assign it GKE Connect rights
-
+** Create and Update bindings for Service Account 
+```
 gcloud projects add-iam-policy-binding $PROJECT \
 --member="serviceAccount:$GKE_CONNECT_SA@$PROJECT.iam.gserviceaccount.com" \
 --role="roles/gkehub.connect"
+```
 
-# Create and download a key
+-- Create and download a key
 gcloud iam service-accounts keys create $GKE_SA_CREDS \
   --iam-account=$GKE_CONNECT_SA@$PROJECT.iam.gserviceaccount.com \
   --project=$PROJECT
