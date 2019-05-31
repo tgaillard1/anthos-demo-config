@@ -87,13 +87,6 @@ kubectx remote
 kubectl get nodes
 ```
 
-*Add local repository*
-
-    sudo gcloud components repositories add \
-    https://storage.googleapis.com/gkehub-gcloud-dist-beta/components-2.json
-
-    sudo gcloud components update --quiet
-
 *Create GCP Service Account for cluster registration*
 ```
 export PROJECT=$(gcloud config get-value project)
@@ -118,12 +111,14 @@ gcloud iam service-accounts keys create $GKE_SA_CREDS \
 *Use Console to Register with Hub*
 ```
 cat $GKE_SA_CREDS
+
+Copy entire GKE_SA_CREDS from cat for next step
 ```
 *In Console*
 
 Go to --> GCP --> GKE --> Clusters --> Register Cluster
 Enter --> Cluster name = remote
-Paste SA 
+Paste SA --> Click Continue
 
 In the ensuing screen, click DOWNLOAD GKE CONNECT MANIFEST and save the file.
 
@@ -132,7 +127,7 @@ In the ensuing screen, click DOWNLOAD GKE CONNECT MANIFEST and save the file.
 vi $WORK_DIR/remote-cluster-gke-connect-config.yaml
 ```
 
-Open MANIFEST doc locally and copy the entire contents into the remote-cluster-gke-connect-config.yaml created above -- save firewall
+Open MANIFEST doc locally and copy the entire contents into the remote-cluster-gke-connect-config.yaml created above -- save file
 
 *Then run this to connect to cluster*
 ```
@@ -338,7 +333,6 @@ git push origin master
 ******************************************************
 ******************************************************
 ## DEMO -- Deploy MicroService Application    
-******************************************************
 ******************************************************
 
 *This is a microservices project that is located here --> https://github.com/GoogleCloudPlatform/microservices-demo*
