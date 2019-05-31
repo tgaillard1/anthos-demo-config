@@ -51,7 +51,7 @@ source ./env
 ```
 
 ******************************************************
-Deploy Anthos
+###Deploy Anthos
 ******************************************************
 ```
 ./bootstrap-workshop.sh
@@ -167,18 +167,7 @@ printf "\n$(kubectl describe secret $KSA | sed -ne 's/^token: *//p')\n\n"
 Go to console and select token and paste in the results from the above command
 
 ******************************************************
-Deploy Sample Apps
-******************************************************
-```
-kubectx central
-kubectl run nginx-central --image=nginx --replicas=3
-
-kubectx remote
-kubectl run nginx-remote --image=nginx --replicas=3
-```
-
-******************************************************
-Central Policy Management
+Configure Central Policy Management
 ******************************************************
 
 *Option 1: Configure Repository for Git*
@@ -341,48 +330,32 @@ tree .
 
 *Push changes to Git using your credentials*
 
+```
 git add . && git commit -m 'adding quoata to checkout namespace'
 git push origin master
-
-
-remove
-git config --global user.email timlgaillard@gmail.com
-git config --global user.name tgaillard1
-git add . && git commit -m 'remove checkout namespace'
-git push origin master
-
+```
 
 ******************************************************
 ******************************************************
-Istio Config 
+###Deploy MicroService Application    
 ******************************************************
 ******************************************************
 
-******* Create a ConfigMap for the stub domain by running the following command.
-cd $BASE_DIR
-./hybrid-multicluster/istio-dns.sh
-
-******* Run the following command to verify the stub domain created in the kube-dns configmap.
-kubectl --context central -n kube-system get configmap kube-dns -o json | jq '.data'
-
-kubectl --context central -n istio-system get configmap coredns -o json | jq -r '.data.Corefile'
-
-******************************************************
-******************************************************
-*******     Deploy MicroService Application    *******
-******************************************************
-******************************************************
-gcloud config set project gaillard-gcp
-cd /home/tgaillard/anthos-demo/
+*This is a microservices project that is located here --> https://github.com/GoogleCloudPlatform/microservices-demo*
+```
+gcloud config set project YOUR_PROJECT
+cd $HOME/anthos-demo/
 source ./env
+```
 
+*If you are starting a new Cloud Shell you will need to updat the firewall rules*
+```
 ./common/remote-k8s-access-fw.sh
+```
 
-https://github.com/GoogleCloudPlatform/microservices-demo
-
-@@@@@@@@@@@@@ Split screens -- cntl b shift 5
+@@@@@@@@ -- screens cntl b - o
 Right screen --
-
+```
 export REMOTE=remote
 export CENTRAL=central
 
@@ -391,33 +364,43 @@ watch \
     kubectl --context $CENTRAL get pods --namespace hipster2; \
     echo '\n## $REMOTE ##\Pods'; \
     kubectl --context $REMOTE get pods --namespace hipster1;"
+```
 
-@@@@@@@@@@@@@ 
-Left screen  cntl b o (or arrow key)
+@@@@@@@@ -- screens cntl b o (or arrow key)
+Left screen --
 
--------- Deploy Applications
+*Deploy Applications*
+
+```
+export REMOTE=remote
+export CENTRAL=Central
 
 cd $BASE_DIR
 ./hybrid-multicluster/istio-deploy-hipster.sh
 
 kubectl --context central -n hipster2 get all
 kubectl --context remote -n hipster1 get all
+```
 
-******** Get External Service IP for Access to App ********
+*Get External Service IP for Access to App*
+```
 kubectl --context central get -n istio-system service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+```
 
-******** Demonstrate replication controler ********
+*Demonstrate replication controler*
 kubectl --context remote -n hipster1 delete pod ADSERVICE-SERVICE
 
-********  Migrate Applications to Central Cluster  ********
+*Migrate Applications to Central Cluster*
+```
 cd $BASE_DIR
 ./hybrid-multicluster/istio-migrate-hipster.sh
+```
 
 ******************************************************
-*******  Demos Anthos Configuration Management *******
+###Demos Anthos Configuration Management
 ******************************************************
 
-******* Validate structure and Connect *******
+*Validate structure and Connect*
 
 cd /home/tgaillard/config-repo
 tree . (results should show istio-system and logging namespaces) --> https://github.com/tgaillard1/config-repo
@@ -507,6 +490,30 @@ rm -rf /home/tgaillard/config-repo/namespaces/checkout/
 git add . && git commit -m 'remove checkout namespace'
 git push origin master
 
+******************************************************
+Deploy Sample Apps -- Simple Example
+******************************************************
+```
+kubectx central
+kubectl run nginx-central --image=nginx --replicas=3
+
+kubectx remote
+kubectl run nginx-remote --image=nginx --replicas=3
+```
+******************************************************
+******************************************************
+Istio Config 
+******************************************************
+******************************************************
+
+******* Create a ConfigMap for the stub domain by running the following command.
+cd $BASE_DIR
+./hybrid-multicluster/istio-dns.sh
+
+******* Run the following command to verify the stub domain created in the kube-dns configmap.
+kubectl --context central -n kube-system get configmap kube-dns -o json | jq '.data'
+
+kubectl --context central -n istio-system get configmap coredns -o json | jq -r '.data.Corefile'
 
 ******************************************************
 ******************************************************
