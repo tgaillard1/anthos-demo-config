@@ -51,7 +51,7 @@ source ./env
 ```
 
 ******************************************************
-### Deploy Anthos
+## Deploy Anthos
 ******************************************************
 ```
 ./bootstrap-workshop.sh
@@ -337,7 +337,7 @@ git push origin master
 
 ******************************************************
 ******************************************************
-### Deploy MicroService Application    
+## DEMO -- Deploy MicroService Application    
 ******************************************************
 ******************************************************
 
@@ -397,7 +397,7 @@ cd $BASE_DIR
 ```
 
 ******************************************************
-###Demos Anthos Configuration Management
+### Anthos Configuration Management
 ******************************************************
 
 *Validate structure and Connect*
