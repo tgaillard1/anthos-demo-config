@@ -347,7 +347,8 @@ source ./env
 ./common/remote-k8s-access-fw.sh
 ```
 
-@@@@@@@@ -- screens cntl b - o
+@@@@@@@@ -- screens cntl b o (or arrow key)
+
 Right screen --
 ```
 export REMOTE=remote
@@ -361,6 +362,7 @@ watch \
 ```
 
 @@@@@@@@ -- screens cntl b o (or arrow key)
+
 Left screen --
 
 *Deploy Applications*
@@ -396,12 +398,14 @@ cd $BASE_DIR
 
 *Validate structure and Connect*
 
+```
 cd /home/tgaillard/config-repo
-tree . (results should show istio-system and logging namespaces) --> https://github.com/tgaillard1/config-repo
+tree . (results should show istio-system and logging namespaces) --> https://github.com/YOUR_GIT_LOCATION/config-repo
 
-@@@@@@@@@@@@@ Split screens
+@@@@@@@@ -- screens cntl b o (or arrow key)
+
 Right screen --
-
+```
 export REMOTE=remote
 export CENTRAL=central
 
@@ -414,13 +418,14 @@ watch \
     kubectl --context $REMOTE get ns; \
     echo '\nRemote Cluster Checkout Quota'; \
     kubectl --context $REMOTE describe resourcequota -n checkout"
+```
 
+@@@@@@@@ -- screens cntl b o (or arrow key)
 
-@@@@@@@@@@@@@ 
-Left screen
+Left screen --
 
-******* Push a config update *******
-
+*Push a config update*
+```
 cd /home/tgaillard/config-repo
 
 tree .
@@ -435,13 +440,16 @@ EOF
 
 tree .
 
-git config --global user.email timlgaillard@gmail.com
-git config --global user.name tgaillard1
+git config --global user.email GIT_EMAIL
+git config --global user.name GIT_USER
 git add . && git commit -m 'adding checkout namespace'
 git push origin master
+```
 
------ Quoata 
-cat <<EOF > /home/tgaillard/config-repo/namespaces/checkout/compute-resources.yaml
+*Add Quoata Policy*
+
+```
+cat <<EOF > $HOME/config-repo/namespaces/checkout/compute-resources.yaml
 apiVersion: v1
 kind: ResourceQuota
 metadata:
@@ -458,31 +466,35 @@ EOF
 
 tree .
 
-git config --global user.email timlgaillard@gmail.com
-git config --global user.name tgaillard1
 git add . && git commit -m 'adding quoata to checkout namespace'
 git push origin master
+```
 
------ remove locally chechout quota and namespace
+*Remove locally chechout quota and namespace*
 
+Show no changes occur -- tries to delete checkout ns but fails as it should
+
+```
 kubectl --context $REMOTE delete resourcequota compute-resources -n checkout
 kubectl --context $REMOTE delete ns checkout
+```
+*Remove chechout quota from Repo*
 
------ remove chechout quota
-
-rm /home/tgaillard/config-repo/namespaces/checkout/compute-resources.yaml
+```
+rm $HOME/config-repo/namespaces/checkout/compute-resources.yaml
 
 git add . && git commit -m 'remove checkout quotas'
 git push origin master
+```
 
------ remove chechout namespace
+*Remove chechout namespace from Repo*
 
-kubectl --context $REMOTE delete ns checkout
-
+```
 rm -rf /home/tgaillard/config-repo/namespaces/checkout/ 
 
 git add . && git commit -m 'remove checkout namespace'
 git push origin master
+```
 
 ******************************************************
 Deploy Sample Apps -- Simple Example
