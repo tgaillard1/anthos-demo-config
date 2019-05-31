@@ -384,7 +384,9 @@ kubectl --context central get -n istio-system service istio-ingressgateway -o js
 ```
 
 *Demonstrate replication controler*
-kubectl --context remote -n hipster1 delete pod ADSERVICE-SERVICE
+```
+kubectl --context remote -n hipster1 delete pod (ADSERVICE-SERVICE Pod name from Right Screen)
+```
 
 *Migrate Applications to Central Cluster*
 ```
@@ -507,20 +509,6 @@ kubectl run nginx-central --image=nginx --replicas=3
 kubectx remote
 kubectl run nginx-remote --image=nginx --replicas=3
 ```
-******************************************************
-******************************************************
-Istio Config 
-******************************************************
-******************************************************
-
-******* Create a ConfigMap for the stub domain by running the following command.
-cd $BASE_DIR
-./hybrid-multicluster/istio-dns.sh
-
-******* Run the following command to verify the stub domain created in the kube-dns configmap.
-kubectl --context central -n kube-system get configmap kube-dns -o json | jq '.data'
-
-kubectl --context central -n istio-system get configmap coredns -o json | jq -r '.data.Corefile'
 
 ******************************************************
 ******************************************************
@@ -528,14 +516,16 @@ Remove applications and cluster
 ******************************************************
 ******************************************************
 
-*******     Remove MicroService Application    *******
-
+*Remove MicroService Application*
+```
 kubectl --context remote delete ns hipster1
 kubectl --context central delete ns hipster2
+```
 
-*******     Remove cluster    *******
-run --> cleanup-workshop.sh
-
+*Remove cluster*
+```
+run --> $HOME/cleanup-workshop.sh
+```
 
 
 
