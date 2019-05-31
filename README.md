@@ -401,6 +401,7 @@ cd $BASE_DIR
 ```
 cd /home/tgaillard/config-repo
 tree . (results should show istio-system and logging namespaces) --> https://github.com/YOUR_GIT_LOCATION/config-repo
+```
 
 @@@@@@@@ -- screens cntl b o (or arrow key)
 
