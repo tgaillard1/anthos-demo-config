@@ -256,7 +256,7 @@ Left screen
 export REMOTE=remote
 export CENTRAL=central
 ```
-*Configure Remote Cluster to look at Git Repository for Configuration Changes*
+*Configure Remote Cluster to look at Git Repository for Configuration Changes and initiate logging (fluendD)*
 
 Variables should be already set and stream results to kubectl apply -- Verify if you are not sure
 
@@ -268,7 +268,7 @@ cat $BASE_DIR/config-management/config_sync.yaml | \
   sed 's@<CLUSTER_NAME>@'"$REMOTE"'@g' | \
   kubectl apply -f -
 ```
-*Configure Central Cluster to look at Git Repository for Configuration Changes*
+*Configure Central Cluster to look at Git Repository for Configuration Changes and initiate logging (fluendD)*
 
 Variables should be already set and stream results to kubectl apply -- Verify if you are not sure
 ```
@@ -281,54 +281,6 @@ cat $BASE_DIR/config-management/config_sync.yaml | \
 ```
 
 In a few moments you should see the logging namespace and fluentd daemonset automatically applied to all the clusters (central and remote).
-
-*Push a config update*
-
-Create new namespace "checkout"
-```
-mkdir namespaces/checkout
-
-cat <<EOF > namespaces/checkout/namespace.yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: checkout
-EOF
-
-tree .
-```
-
-*Push changes to Git using your credentials*
-```
-git config --global user.email GIT_EMAIL
-git config --global user.name GIT_USER
-git add . && git commit -m 'adding checkout namespace'
-git push origin master
-```
-
-Create new "quoata" policy
-``` 
-cat <<EOF > namespaces/checkout/quota.yaml
-kind: ResourceQuota
-apiVersion: v1
-metadata:
-  name: quota
-spec:
-  hard:
-    pods: "3"
-    cpu: "1"
-    memory: 1Gi
-EOF
-
-tree .
-```
-
-*Push changes to Git using your credentials*
-
-```
-git add . && git commit -m 'adding quoata to checkout namespace'
-git push origin master
-```
 
 ******************************************************
 ******************************************************
@@ -529,3 +481,50 @@ run --> /$BASE_DIR/cleanup-workshop.sh
 *Note: Once cluster is removed make sure to "Unregister" the remote cluster in the console.  Once unregistered you can deploy the reference implementation again.
 
 
+*Push a config update*
+
+Create new namespace "checkout"
+```
+mkdir namespaces/checkout
+
+cat <<EOF > namespaces/checkout/namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: checkout
+EOF
+
+tree .
+```
+
+*Push changes to Git using your credentials*
+```
+git config --global user.email GIT_EMAIL
+git config --global user.name GIT_USER
+git add . && git commit -m 'adding checkout namespace'
+git push origin master
+```
+
+Create new "quoata" policy
+``` 
+cat <<EOF > namespaces/checkout/quota.yaml
+kind: ResourceQuota
+apiVersion: v1
+metadata:
+  name: quota
+spec:
+  hard:
+    pods: "3"
+    cpu: "1"
+    memory: 1Gi
+EOF
+
+tree .
+```
+
+*Push changes to Git using your credentials*
+
+```
+git add . && git commit -m 'adding quoata to checkout namespace'
+git push origin master
+```
