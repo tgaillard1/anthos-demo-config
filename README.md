@@ -369,7 +369,7 @@ Left screen --
 
 ```
 export REMOTE=remote
-export CENTRAL=Central
+export CENTRAL=central
 
 cd $BASE_DIR
 ./hybrid-multicluster/istio-deploy-hipster.sh
@@ -401,7 +401,7 @@ cd $BASE_DIR
 *Validate structure and Connect*
 
 ```
-cd /home/tgaillard/config-repo
+cd $HOME/config-repo
 tree . (results should show istio-system and logging namespaces) --> https://github.com/YOUR_GIT_LOCATION/config-repo
 ```
 
@@ -493,7 +493,7 @@ git push origin master
 *Remove chechout namespace from Repo*
 
 ```
-rm -rf /home/tgaillard/config-repo/namespaces/checkout/ 
+rm -rf $HOME/config-repo/namespaces/checkout/ 
 
 git add . && git commit -m 'remove checkout namespace'
 git push origin master
@@ -524,8 +524,8 @@ kubectl --context central delete ns hipster2
 
 *Remove cluster*
 ```
-run --> $HOME/cleanup-workshop.sh
+run --> /$BASE_DIR/cleanup-workshop.sh
 ```
-
+*Note: Once cluster is removed make sure to "Unregister" the remote cluster in the console.  Once unregistered you can deploy the reference implementation again.
 
 
