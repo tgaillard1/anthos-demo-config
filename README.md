@@ -162,6 +162,16 @@ printf "\n$(kubectl describe secret $KSA | sed -ne 's/^token: *//p')\n\n"
 Go to console and select token and paste in the results from the above command
 
 ******************************************************
+Configure DNS for Istio (Remote Clusters)
+******************************************************
+
+*Create a ConfigMap for the stub domain by running the following command*
+```
+cd $BASE_DIR
+./hybrid-multicluster/istio-dns.sh
+```
+
+******************************************************
 Configure Central Policy Management
 ******************************************************
 
@@ -380,13 +390,16 @@ watch \
 Left screen --
 
 *Push a config update*
+
+Create new namespace "checkout"
+
 ```
-cd /home/tgaillard/config-repo
+cd $HOME/config-repo
 
 tree .
 
-mkdir /home/tgaillard/config-repo/namespaces/checkout
-cat <<EOF > /home/tgaillard/config-repo/namespaces/checkout/namespace.yaml
+mkdir $HOME/config-repo/namespaces/checkout
+cat <<EOF > $HOME/config-repo/namespaces/checkout/namespace.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -395,13 +408,11 @@ EOF
 
 tree .
 
-git config --global user.email GIT_EMAIL
-git config --global user.name GIT_USER
 git add . && git commit -m 'adding checkout namespace'
 git push origin master
 ```
 
-*Add Quoata Policy*
+Create new "quoata" policy
 
 ```
 cat <<EOF > $HOME/config-repo/namespaces/checkout/compute-resources.yaml
