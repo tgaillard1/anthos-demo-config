@@ -296,6 +296,7 @@ In a few moments you should see the logging namespace and fluentd daemonset auto
 ******************************************************
 ## DEMO -- Deploy MicroService Application    
 ******************************************************
+******************************************************
 
 *This is a microservices project that is located here --> https://github.com/GoogleCloudPlatform/microservices-demo*
 ```
