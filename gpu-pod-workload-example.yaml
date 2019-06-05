@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gpu-workload
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: gpu-workload
+    spec:
+      containers:
+        - name: gpu-workload
+          image: nvidia/cuda:10.0-runtime-ubuntu18.04
+      tolerations:
+      - key: nvidia.com
+        operator: Equal
+        value: gpu
+        effect: NoSchedule
+      nodeSelector:
+        nvidia.com: gpu
