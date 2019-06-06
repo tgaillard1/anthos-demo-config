@@ -38,7 +38,7 @@ gcloud services enable \
 ```
 
 ******************************************************
-Verify your project is under the gcct-demos folder:
+Verify your project is under the gcct-demos folder
 ******************************************************
 ```
 gcloud projects describe $PROJECT_ID --format="value(parent.id)"
