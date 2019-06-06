@@ -38,6 +38,17 @@ gcloud services enable \
 ```
 
 ******************************************************
+Verify your project is under the gcct-demos folder:
+******************************************************
+```
+gcloud projects describe $PROJECT_ID --format="value(parent.id)"
+```
+*Output*
+```
+212894236552 # gcct-demos folder id
+```
+
+******************************************************
 Clone Source Repo & Set the base directory and paths
 ******************************************************
 ```
