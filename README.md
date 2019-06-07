@@ -188,15 +188,15 @@ Configure Central Policy Management
 
 *Option 1: Configure Repository for Git*
  
-Fork the sample repo to your git location so you can push changes to your own copy --> https://github.com/tgaillard1/config-repo.git
+Fork the sample repo to your git location so you can push changes to your own copy --> https://github.com/tgaillard1/config-repos.git
 
 ```
 cd $HOME
-git clone https://github.com/YOUR_GIT_LOCATION/config-repo.git
-cd $HOME/config-repo
+git clone https://github.com/YOUR_GIT_LOCATION/config-repos.git
+cd $HOME/config-repos
 
 export GITHUB_ACCOUNT=YOUR_GIT_USER
-export REPO_URL=https://github.com/YOUR_GIT_LOCATION/config-repo.git
+export REPO_URL=https://github.com/YOUR_GIT_LOCATION/config-repos.git
 ```
 *Validate structure and Connect*
 
@@ -213,13 +213,13 @@ cat $BASE_DIR/config-management/config_sync.yaml (verify it has right variables)
                 ******* Google Cloud Source Repositories (GCSR) *******
 
                 export GCLOUD_ACCOUNT=$(gcloud config get-value account)
-                export REPO_URL=https://source.developers.google.com/p/${PROJECT}/r/config-repo
+                export REPO_URL=https://source.developers.google.com/p/${PROJECT}/r/config-repos
 
                 git remote remove origin
                 git config credential.helper gcloud.sh
                 git remote add origin $REPO_URL
 
-                gcloud source repos create config-repo
+                gcloud source repos create config-repos
                 git push -u origin master
 
                 ******* GCSR generate ssh keypair *******
@@ -375,8 +375,8 @@ cd $BASE_DIR
 *Validate structure and Connect*
 
 ```
-cd $HOME/config-repo
-tree . (results should show istio-system and logging namespaces) --> https://github.com/YOUR_GIT_LOCATION/config-repo
+cd $HOME/config-repos
+tree . (results should show istio-system and logging namespaces) --> https://github.com/YOUR_GIT_LOCATION/config-repos
 ```
 
 @@@@@@@@ -- screens cntl b o (or arrow key)
@@ -406,12 +406,12 @@ Left screen --
 Create new namespace "checkout"
 
 ```
-cd $HOME/config-repo
+cd $HOME/config-repos
 
 tree .
 
-mkdir $HOME/config-repo/namespaces/checkout
-cat <<EOF > $HOME/config-repo/namespaces/checkout/namespace.yaml
+mkdir $HOME/config-repos/namespaces/checkout
+cat <<EOF > $HOME/config-repos/namespaces/checkout/namespace.yaml
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -427,7 +427,7 @@ git push origin master
 Create new "quoata" policy
 
 ```
-cat <<EOF > $HOME/config-repo/namespaces/checkout/compute-resources.yaml
+cat <<EOF > $HOME/config-repos/namespaces/checkout/compute-resources.yaml
 apiVersion: v1
 kind: ResourceQuota
 metadata:
@@ -459,7 +459,7 @@ kubectl --context $REMOTE delete ns checkout
 *Remove chechout quota from Repo*
 
 ```
-rm $HOME/config-repo/namespaces/checkout/compute-resources.yaml
+rm $HOME/config-repos/namespaces/checkout/compute-resources.yaml
 
 git add . && git commit -m 'remove checkout quotas'
 git push origin master
@@ -468,7 +468,7 @@ git push origin master
 *Remove chechout namespace from Repo*
 
 ```
-rm -rf $HOME/config-repo/namespaces/checkout/ 
+rm -rf $HOME/config-repos/namespaces/checkout/ 
 
 git add . && git commit -m 'remove checkout namespace'
 git push origin master
