@@ -58,9 +58,9 @@ Verify your project is under the gcct-demos folder
 ```
 gcloud projects describe $PROJECT_ID --format="value(parent.id)"
 
---- Output (do not copy)
+--- Output to verify inclusion (do not copy)
 
-212894236552 # gcct-demos folder id
+212894236552 # gcct-demos folder id 
 ```
 
 ******************************************************
