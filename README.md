@@ -15,14 +15,19 @@ http://cloud-exemptions.googleplex.com
 REQUEST ACCESS Cloud Service Management (CSM)
 https://docs.google.com/forms/d/e/1FAIpQLSfz8AashLH42UgvOPxrOHmuk1FIuqV9L76RnilXfPNp1Bo1FQ/viewform?usp=mail_form_link
 
-*Create your service account and register key*
+*Create your service account*
+
 ```
-         ################### GKE OnPrem Whitelist ###################
-         (project, user, service account)
-         gcloud iam service-accounts create anthos-connect
-         Fill out the form with
+(project, user, service account)
+gcloud iam service-accounts create anthos-connect
+```
+
+*Register Key with the form below*
+https://docs.google.com/forms/d/e/1FAIpQLSfxAJ_WKyWMTgJcN0R8Er50C4zbGpFMIaBs_yVy35FEtjuD7Q/viewform
+
+```
+Fill out the form with
          anthos-connect@[YOUR_PROJECT].iam.gserviceaccount.com
-         #######################################################
 ```
 
 ******************************************************
